@@ -13,8 +13,11 @@
         </ul>
         <div>
             <p>Count: <span>{{count}}</span></p>
+            <h3>{{incrementAmount}}</h3>
             <button v-on:click="incrementCount">Increment</button>
             <button v-on:click="decrementCount" >Decrement</button>
+            <label for="IncrementAmount"></label>
+            <input type="number" v-on:input="changeIncrementAmount" v-bind:value="incrementAmount">
         </div>
     </div>
     
@@ -35,17 +38,22 @@
                     { name: 'Soka'},
                     ],
                     count:0,
+                    incrementAmount:1,
             }
         },
         methods:{
             incrementCount() {
-                    this.count++;
+                    this.count+=this.incrementAmount;
                 },
             decrementCount() {
                 if (this.count > 0) {
                     this.count--;
                 }
-        }
+            },
+            changeIncrementAmount(){
+                console.log(event.target.value);
+                this.incrementAmount = Number(event.target.value);
+            }
     }
         }).mount('#app')
             
