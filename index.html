@@ -15,6 +15,7 @@
         <div>
             <p>Count: <span>{{count}}</span></p>
             <h3>{{incrementAmount}}</h3>
+            <h2>{{counterTitle}}</h2>
             <button v-on:click="incrementCount">Increment</button>
             <button v-on:click="decrementCount" >Decrement</button>
             <label for="IncrementAmount"></label>
@@ -42,9 +43,21 @@
                     incrementAmount:1,
             }
         },
+        computed:{
+            displayTitle(){
+                if(this.count >20){
+                    return 'Counter Standard - Very Long'
+                } else {
+                    'Counter Standard'
+                }
+            },
+            optimizedIncrementAmount(){
+                return this.displayTitle.length * this.incrementAmount
+            }
+        },
         methods:{
             incrementCount() {
-                    this.count+=this.incrementAmount;
+                    this.count+=this.optimizedIncrementAmount;
                 },
             decrementCount() {
                 if (this.count > 0) {
@@ -54,7 +67,15 @@
             changeIncrementAmount(){
                 console.log(event.target.value);
                 this.incrementAmount = Number(event.target.value);
+            },
+            
+    },
+    watch:{
+        count(newValue){
+            if(newValue>20){
+                this.counterTitle  += 'Very Long'
             }
+        }
     }
         }).mount('#app')
             
