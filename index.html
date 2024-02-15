@@ -8,87 +8,80 @@
 <body>
     <!-- . -->
     <div id="app">
+        <h2>{{ benderStatistics }}</h2>
+        <ul>
+            <li>Earth: {{ benderStatistics.Earth }}</li>
+            <li>Air: {{ benderStatistics.Air }}</li>
+            <li>Water: {{ benderStatistics.Water }}</li>
+            <li>Fire: {{ benderStatistics.Fire }}</li>
+        </ul>
+        <h2>Characters</h2>
         <p v-if="characters.length === 0">There are no characters</p>
         <ul v-else>
-            <li v-for="character in characters">{{character.name}}</li>
+            <li v-for="character in characters">{{ character.name }}</li>
         </ul>
         <div>
-            <p>Count: <span>{{count}}</span></p>
-            <h3>{{incrementAmount}}</h3>
-            <h2>{{counterTitle}}</h2>
-            <button v-on:click="incrementCount">Increment</button>
-            <button v-on:click="decrementCount" >Decrement</button>
-            <label for="IncrementAmount"></label>
-            <input type="number" v-on:input="changeIncrementAmount" v-bind:value="incrementAmount">
+            <p>Count: <span>{{ count }}</span></p>
+            <h3>{{ incrementAmount }}</h3>
+            <h2>{{ counterTitle }}</h2>
+            <button @click="incrementCount">Increment</button>
+            <button @click="decrementCount">Decrement</button>
+            <label for="IncrementAmount">Increment Amount:</label>
+            <input type="number" @input="changeIncrementAmount" v-model.number="incrementAmount">
         </div>
     </div>
-    
 
-
-
-
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
     <script>
         Vue.createApp({
-            data(){
-                return{ 
-                    characters:[
-                    { name:'Aang',
-                      element: ['Air', 'Earth', 'Fire', 'Water']
-                    },
-                    { name: 'Zuko',
-                      element: ['Fire']
-                },
-                    { name: 'Toph',
-                      element: ['Earth']
-                },
-                    { name: 'Katara'
-                      element: ['Water']
-                },
-                    { name: 'Soka',
-                    element: []
-                },
+            data() {
+                return { 
+                    characters: [
+                        { name: 'Aang', element: ['Air', 'Earth', 'Fire', 'Water'] },
+                        { name: 'Zuko', element: ['Fire'] },
+                        { name: 'Toph', element: ['Earth'] },
+                        { name: 'Katara', element: ['Water'] },
+                        { name: 'Soka', element: [] }
                     ],
-                    count:0,
-                    incrementAmount:1,
-            }
-        },
-        computed:{
-            displayTitle(){
-                if(this.count >20){
-                    return 'Counter Standard - Very Long'
-                } else {
-                    'Counter Standard'
+                    count: 0,
+                    incrementAmount: 1,
+                    counterTitle: 'Counter: '
                 }
             },
-            optimizedIncrementAmount(){
-                return this.displayTitle.length * this.incrementAmount
-            }
-        },
-        methods:{
-            incrementCount() {
-                    this.count+=this.optimizedIncrementAmount;
+            computed: {
+                benderStatistics() {
+                    const statistics = { Earth: 0, Air: 0, Water: 0, Fire: 0 };
+                    this.characters.forEach(character => {
+                        character.element.forEach(element => {
+                            if (statistics.hasOwnProperty(element)) {
+                                statistics[element]++;
+                            }
+                        });
+                    });
+                    return statistics;
+                }
+            },
+            methods: {
+                incrementCount() {
+                    this.count += this.incrementAmount;
                 },
-            decrementCount() {
-                if (this.count > 0) {
-                    this.count--;
+                decrementCount() {
+                    if (this.count > 0) {
+                        this.count--;
+                    }
+                },
+                changeIncrementAmount(event) {
+                    this.incrementAmount = Number(event.target.value);
                 }
             },
-            changeIncrementAmount(){
-                console.log(event.target.value);
-                this.incrementAmount = Number(event.target.value);
-            },
-            
-    },
-    watch:{
-        count(newValue){
-            if(newValue>20){
-                this.counterTitle  += 'Very Long'
+            watch: {
+                count(newValue) {
+                    if (newValue > 20) {
+                        this.counterTitle += 'Very Long';
+                    }
+                }
             }
-        }
-    }
-        }).mount('#app')
-            
+        }).mount('#app');
     </script>
 </body>
 </html>
